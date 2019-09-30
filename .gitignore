@@ -1,13 +1,14 @@
 *.iml
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
+.idea/workspace.xml
+.idea/libraries
+.idea/*
 .DS_Store
 /build
 /captures
 .externalNativeBuild
-=======
+
 # Built application files
 *.apk
 *.ap_
@@ -49,6 +50,7 @@ captures/
 .idea/gradle.xml
 .idea/dictionaries
 .idea/libraries
+.idea/misc.xml
 
 # Keystore files
 *.jks
@@ -63,4 +65,3 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
->>>>>>> d8b929281dc99885d71324244b5ae43cb76f93b8

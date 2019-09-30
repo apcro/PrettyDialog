@@ -15,8 +15,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -29,6 +27,9 @@ import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.appcompat.widget.AppCompatImageView;
 
 import static android.widget.ImageView.ScaleType.CENTER_CROP;
 import static android.widget.ImageView.ScaleType.CENTER_INSIDE;
@@ -127,8 +128,18 @@ public class PrettyDialog extends AppCompatDialog {
         return this;
     }
 
-    public PrettyDialog addButton(String text, Integer textColor, Integer backgroundColor, /*BUTTON_TYPE type,*/ PrettyDialogCallback callback){
-        PrettyDialogButton button = new PrettyDialogButton(context,text, textColor, backgroundColor, typeface, /*type,*/ callback);
+    public PrettyDialog addButton(String text, Integer textColor, Integer backgroundColor, PrettyDialogCallback callback) {
+        PrettyDialogButton button = new PrettyDialogButton(context,text, textColor, backgroundColor, typeface, callback);
+        int margin = resources.getDimensionPixelSize(R.dimen.pdlg_space_1_0x);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(margin, margin, margin, 0);
+        button.setLayoutParams(lp);
+        ll_buttons.addView(button);
+        return this;
+    }
+
+    public PrettyDialog addButton(String text, Integer textColor, Integer backgroundColor, PrettyDialogCallback callback, float radius) {
+        PrettyDialogButton button = new PrettyDialogButton(context,text, textColor, backgroundColor, typeface, callback, radius);
         int margin = resources.getDimensionPixelSize(R.dimen.pdlg_space_1_0x);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.setMargins(margin, margin, margin, 0);
@@ -149,7 +160,6 @@ public class PrettyDialog extends AppCompatDialog {
     }
 
     public PrettyDialog setTitleColor(Integer color){
-        //tv_title.setTextColor(ContextCompat.getColor(context,color==null?R.color.pdlg_color_black : color));
         tv_title.setTextColor(context.getResources().getColor(color==null?R.color.pdlg_color_black : color));
         return this;
     }
@@ -166,7 +176,6 @@ public class PrettyDialog extends AppCompatDialog {
     }
 
     public PrettyDialog setMessageColor(Integer color){
-        //tv_message.setTextColor(ContextCompat.getColor(context,color==null?R.color.pdlg_color_black :color));
         tv_message.setTextColor(context.getResources().getColor(color==null?R.color.pdlg_color_black :color));
         return this;
     }
@@ -179,7 +188,6 @@ public class PrettyDialog extends AppCompatDialog {
     }
 
     public PrettyDialog setIconTint(Integer color){
-        //iv_icon.setColorFilter(ContextCompat.getColor(context,color==null?default_icon_tint:color), PorterDuff.Mode.MULTIPLY);
         if(color==null){
             iv_icon.setColorFilter(null);
         }

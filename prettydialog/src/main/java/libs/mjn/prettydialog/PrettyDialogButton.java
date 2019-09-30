@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,13 +22,13 @@ class PrettyDialogButton extends LinearLayout {
     Context context;
     Resources resources;
     PrettyDialogCallback callback;
-    /*PrettyDialog.BUTTON_TYPE background_type = PrettyDialog.BUTTON_TYPE.BORDER;*/
     Integer default_background_color = R.color.pdlg_color_blue, background_color;
     Integer default_text_color = R.color.pdlg_color_white, text_color;
     String text;
     TextView tv;
     ImageView iv;
     Typeface tf;
+    Float radius = 5.6f;
 
     public PrettyDialogButton(
             Context context,
@@ -35,7 +36,6 @@ class PrettyDialogButton extends LinearLayout {
             int textColor,
             int background_color,
             Typeface tf,
-            /*PrettyDialog.BUTTON_TYPE type,*/
             PrettyDialogCallback callback) {
         super(context);
         this.context = context;
@@ -44,8 +44,28 @@ class PrettyDialogButton extends LinearLayout {
         this.text_color = textColor;
         this.background_color = background_color;
         this.tf = tf;
-        /*this.background_type = type;*/
         this.callback = callback;
+        this.radius = 5.6f;
+        init();
+    }
+
+    public PrettyDialogButton(
+            Context context,
+            String text,
+            int textColor,
+            int background_color,
+            Typeface tf,
+            PrettyDialogCallback callback,
+            Float radius) {
+        super(context);
+        this.context = context;
+        resources = context.getResources();
+        this.text = text;
+        this.text_color = textColor;
+        this.background_color = background_color;
+        this.tf = tf;
+        this.callback = callback;
+        this.radius = radius;
         init();
     }
 
@@ -73,34 +93,7 @@ class PrettyDialogButton extends LinearLayout {
                 }
             }
         });
-        /*setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        v.setAlpha(0.7f);
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        v.setAlpha(1.0f);
-                        if(callback!=null) {
-                            v.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    callback.onClick();
-                                }
-                            }, 150);
-                        }
-                        return true;
-                }
-                return false;
-            }
-        });*/
     }
-
-    /*private void setBackgroundType(PrettyDialog.BUTTON_TYPE type) {
-        background_type = type;
-        setBackground();
-    }*/
 
     public void setTypeface(Typeface tf){
         this.tf = tf;
@@ -127,9 +120,25 @@ class PrettyDialogButton extends LinearLayout {
         StateListDrawable res = new StateListDrawable();
         res.setExitFadeDuration(150);
         GradientDrawable pressed_drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,new int[] {getLightenColor(color),getLightenColor(color)});
-        pressed_drawable.setCornerRadius(resources.getDimensionPixelSize(R.dimen.pdlg_corner_radius));
+//        pressed_drawable.setCornerRadius(resources.getDimensionPixelSize(R.dimen.pdlg_corner_radius));
+        pressed_drawable.setCornerRadius(
+                TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        radius,
+                        resources.getDisplayMetrics()
+                )
+        );
+
         GradientDrawable default_drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,new int[] {color,color});
-        default_drawable.setCornerRadius(resources.getDimensionPixelSize(R.dimen.pdlg_corner_radius));
+//        default_drawable.setCornerRadius(resources.getDimensionPixelSize(R.dimen.pdlg_corner_radius));
+
+        default_drawable.setCornerRadius(
+            TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    radius,
+                    resources.getDisplayMetrics()
+            )
+        );
         res.addState(new int[]{android.R.attr.state_pressed}, pressed_drawable);
         res.addState(new int[]{}, default_drawable);
         return res;
